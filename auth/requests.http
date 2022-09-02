@@ -1,0 +1,8 @@
+###
+POST https://netology-slow-rest.herokuapp.com/auth.php
+Content-Type: application/json
+
+{
+    "login": "demo",
+    "password": "demo"
+}
