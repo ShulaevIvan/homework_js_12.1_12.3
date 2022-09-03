@@ -25,6 +25,24 @@ function getData(data){
 };
 
 
+function showWelcome(formTag, welcomeTag, useridTag){
+
+    const singinWrap = document.querySelector('.signin')
+    const singOutBtn = document.querySelector('#signout__btn')
+
+    useridTag.textContent = localStorage.getItem('user_id')
+    welcomeTag.classList.add('welcome_active')
+    formTag.style.display = 'none'
+    singOutBtn.style.display = 'block'
+    singinWrap.appendChild(singOutBtn) 
+};
+
+function logOut(welcomeTag, formTag){
+    formTag.style.display = 'block'
+    welcomeTag.classList.remove('welcome_active')
+    localStorage.removeItem('user_id')
+};
+
 window.addEventListener('DOMContentLoaded', ()=>{
 
     const form = document.querySelector('#signin__form')
@@ -34,12 +52,12 @@ window.addEventListener('DOMContentLoaded', ()=>{
     const singinWrap = document.querySelector('.signin')
     let singOutBtn = document.querySelector('#signout__btn')
     let singInBtn = document.querySelector('#signin__btn')
+
+    singOutBtn.style.display = 'none'
+
     // localStorage.clear()
     if (localStorage.getItem('user_id') != null) {
-        userId.textContent = localStorage.getItem('user_id')
-        welcome.classList.add('welcome_active')
-        form.style.display = 'none'
-        singinWrap.appendChild(singOutBtn)
+        showWelcome(form, welcome, userId)
     };
 
     singInBtn.addEventListener('click', (e)=>{
@@ -55,11 +73,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
             data
             .then((result)=>{
                 localStorage.setItem('user_id', result.user_id)
-                userId.textContent = result['user_id']
-                welcome.classList.add('welcome_active')
-                form.style.display = 'none'
-                singinWrap.appendChild(singOutBtn)
-        
+                showWelcome(form, welcome, userId)
             })
             .catch((err)=>{
                 alert(err)
@@ -73,13 +87,8 @@ window.addEventListener('DOMContentLoaded', ()=>{
 
         if (target && target.getAttribute('id') == 'signout__btn'){
 
-            const user = localStorage.getItem('user_id')
-            singInBtn.remove()
-            form.style.display = 'block'
-            welcome.classList.remove('welcome_active')
-            localStorage.removeItem('user_id')
+            logOut(welcome, form)
+            singOutBtn.remove()
         };
-    });
-
-    
+    }); 
 });
